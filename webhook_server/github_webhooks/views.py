@@ -7,7 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def webhook_handler(request):
+    print('-' * 100)
     print(request)
+    print('-' * 100)
     # # if request.method == 'POST':
     # #     print('-' * 100)
     # #     print(request)
@@ -51,7 +53,7 @@ def webhook_handler(request):
     #         'message': 'Invalid request method.'
     #     }
     #     return JsonResponse(response_data, status=405)
-    #return HttpResponse('pong')
+    return HttpResponse('pong')
 
 
 def index(request):
