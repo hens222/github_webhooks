@@ -13,3 +13,8 @@ def webhook_handler(request):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
+
+
+def index(request):
+    print(request)
+    return HttpResponse("tech with team")
