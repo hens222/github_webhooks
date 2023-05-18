@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def webhook_handler(request):
     if request.method == 'POST':
+        print(request)
         payload = json.loads(request.body)
         # Handle the webhook payload here
         # Example: process the payload and perform necessary actions
