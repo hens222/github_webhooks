@@ -3,10 +3,12 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 
 
-@csrf_exempt
+#@csrf_exempt
 def webhook_handler(request):
     if request.method == 'POST':
+        print('-' * 100)
         print(request)
+        print('-' * 100)
         payload = json.loads(request.body)
         # Handle the webhook payload here
         # Example: process the payload and perform necessary actions
