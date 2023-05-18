@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def webhook_handler(payload):
     print(type(payload))
+    print(json.loads(payload.body))
     # print('-' * 100)
     # print(json.loads(request.body))
     # print('-' * 100)
