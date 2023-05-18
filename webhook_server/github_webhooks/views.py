@@ -6,28 +6,20 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
-def webhook_handler(payload):
-    print(type(payload))
-    print(json.loads(payload.body))
-    # print('-' * 100)
-    # print(json.loads(request.body))
-    # print('-' * 100)
-    # # if request.method == 'POST':
-    # #     print('-' * 100)
-    # #     print(request)
-    # #     print('-' * 100)
-    # #     payload = json.loads(request.body)
-    # #     # Handle the webhook payload here
-    # #     # Example: process the payload and perform necessary actions
-    # #     event_type = request.headers.get('X-GitHub-Event')
-    # #     print(f'Received {event_type} event: {payload}')
-    # #     # Return a response
-    # #     return HttpResponse(status=200)
-    # # else:
-    # #     return HttpResponse(status=405)
-    # print('-' * 100)
-    # print(json.loads(request.body))
-    # print('-' * 100)
+def webhook_handler(request):
+    if request.method == 'POST':
+        print('-' * 100)
+        print(request)
+        print('-' * 100)
+        payload = json.loads(request.body)
+        # Handle the webhook payload here
+        # Example: process the payload and perform necessary actions
+        event_type = request.headers.get('X-GitHub-Event')
+        print(f'Received {event_type} event: {payload}')
+        # Return a response
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)
     # if request.method == 'POST':
     #
     #     csrf_token = request.GET.get('csrfmiddlewaretoken', '')
@@ -55,7 +47,7 @@ def webhook_handler(payload):
     #         'message': 'Invalid request method.'
     #     }
     #     return JsonResponse(response_data, status=405)
-    return HttpResponse('pong')
+    # return HttpResponse('pong')
 
 
 def index(request):
