@@ -6,7 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
-def webhook_handler(request):
+def webhook_handler(request, event):
+    print(event)
     # if request.method == 'POST':
     #     print('-' * 100)
     #     print(request)
