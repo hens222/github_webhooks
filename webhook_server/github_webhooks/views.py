@@ -21,7 +21,7 @@ def webhook_handler(request):
     # else:
     #     return HttpResponse(status=405)
     print('-' * 100)
-    print(request)
+    print(request.body)
     print('-' * 100)
     if request.method == 'POST':
 
