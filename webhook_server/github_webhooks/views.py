@@ -20,6 +20,8 @@ def webhook_handler(request):
         # Handle the webhook payload here
         # Example: process the payload and perform necessary actions
         event_type = request.headers.get('X-GitHub-Event')
+        print(ACTION_CHOICES)
+        print(type(ACTION_CHOICES))
         if event_type == 'pull_request':
             pu_number = payload['number']
             action = ACTION_CHOICES[[payload['action']]]
