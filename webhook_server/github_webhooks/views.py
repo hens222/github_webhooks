@@ -7,9 +7,52 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import PullRequest
 
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from PIL import Image
+from io import BytesIO
 
-def check_pull_request_exists(pk):
-    return PullRequest.objects.filter(id=pk).exists()
+from django.conf import settings
+
+
+def capture_screenshot(url):
+    # Configure Selenium
+    options = Options()
+    options.add_argument('--headless')  # Run the browser in headless mode (without GUI)
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(options=options)
+
+    try:
+        # Load the web page
+        driver.get(url)
+
+        # Wait for the page to load (you can adjust the sleep duration as needed)
+        time.sleep(2)
+
+        # Capture screenshot
+        screenshot = driver.get_screenshot_as_png()
+
+        # Convert the screenshot to a PIL Image object
+        image = Image.open(BytesIO(screenshot))
+
+        # Save the image to a file or database
+        # Example: Save the image to a file
+        image_path = settings.MEDIA_ROOT
+        image.save(image_path)
+
+        # Return the image path or image object, depending on your use case
+        return image_path
+        print('-' * 100)
+        print('done')
+        print('-' * 100)
+    finally:
+        print('-' * 100)
+        print('fail')
+        print('-' * 100)
+        # Quit the browser
+        driver.quit()
 
 
 @csrf_exempt
@@ -27,13 +70,13 @@ def webhook_handler(request):
 
             if pull_request['updated_at']:
                 updated_at = datetime.strptime(pull_request['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
-
+            url = pull_request['html_url']
             try:
                 obj, created = PullRequest.objects.get_or_create(
                     id=id,
                     defaults={
                         'action': action,
-                        'url': pull_request['html_url'],
+                        'url': url,
                         'state': state,
                         'title': pull_request['title'],
                         'body': pull_request['body'],
@@ -43,7 +86,9 @@ def webhook_handler(request):
                         'user': pull_request['user']['login'],
                     }
                 )
-
+                screenshot_path = capture_screenshot(pull_request.url)
+                pull_request.screenshot = screenshot_path
+                pull_request.save()
                 if not created:
                     obj.action = action
                     obj.state = state
