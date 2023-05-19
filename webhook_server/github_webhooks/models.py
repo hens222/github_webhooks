@@ -20,7 +20,7 @@ class PullRequest(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(default=None, null=True)
-    merge_commit_sha = models.CharField(max_length=40)
+    merge_commit_sha = models.CharField(max_length=40, null=True)
     user = models.CharField(max_length=100)
 
     class Meta:
