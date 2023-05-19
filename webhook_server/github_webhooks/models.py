@@ -14,6 +14,7 @@ class PullRequest(models.Model):
     ]
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
     id = models.PositiveIntegerField(primary_key=True)
+    number = models.PositiveIntegerField()
     url = models.URLField()
     state = models.CharField(max_length=10, choices=STATE_CHOICES)
     title = models.CharField(max_length=255)
