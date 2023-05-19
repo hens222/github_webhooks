@@ -43,7 +43,7 @@ def webhook_handler(request):
                     user=pull_request['user']['login'],
                 )
             else:
-                PullRequest.objects.filter(pu_number=pu_number).update(action=action, state=state,
+                PullRequest.objects.filter(number=pu_number).update(action=action, state=state,
                                                                        updated_at=updated_at)
         # Return a response
         return HttpResponse(status=200)
