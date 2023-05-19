@@ -16,6 +16,10 @@ from io import BytesIO
 from django.conf import settings
 
 
+def check_pull_request_exists(pk):
+    return PullRequest.objects.filter(pk=pk).exists()
+
+
 def capture_screenshot(url):
     # Configure Selenium
     options = Options()
@@ -59,44 +63,37 @@ def capture_screenshot(url):
 def webhook_handler(request):
     if request.method == 'POST':
         payload = json.loads(request.body)
-
+        # Handle the webhook payload here
+        # Example: process the payload and perform necessary actions
         event_type = request.headers.get('X-GitHub-Event')
         if event_type == 'pull_request':
             pull_request = payload['pull_request']
             id = pull_request['id']
             action = payload['action']
             state = pull_request['state']
-            updated_at = None
-
             if pull_request['updated_at']:
                 updated_at = datetime.strptime(pull_request['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
-            url = pull_request['html_url']
-            try:
-                obj, created = PullRequest.objects.get_or_create(
+            else:
+                updated_at = None
+            if not check_pull_request_exists(id):
+                url = pull_request['html_url']
+                PullRequest.objects.create(
+                    action=action,
                     id=id,
-                    defaults={
-                        'action': action,
-                        'url': url,
-                        'state': state,
-                        'title': pull_request['title'],
-                        'body': pull_request['body'],
-                        'created_at': datetime.strptime(pull_request['created_at'], "%Y-%m-%dT%H:%M:%SZ"),
-                        'updated_at': updated_at,
-                        'merge_commit_sha': pull_request['merge_commit_sha'],
-                        'user': pull_request['user']['login'],
-                    }
+                    url=url,
+                    state=state,
+                    title=pull_request['title'],
+                    body=pull_request['body'],
+                    created_at=datetime.strptime(pull_request['created_at'], "%Y-%m-%dT%H:%M:%SZ"),
+                    updated_at=updated_at,
+                    merge_commit_sha=pull_request['merge_commit_sha'],
+                    user=pull_request['user']['login'],
+                    screenshot=capture_screenshot(url)
                 )
-                screenshot_path = capture_screenshot(pull_request.url)
-                pull_request.screenshot = screenshot_path
-                pull_request.save()
-                if not created:
-                    obj.action = action
-                    obj.state = state
-                    obj.updated_at = updated_at
-                    obj.save()
-
-            except PullRequest.DoesNotExist:
-                logging.error(f"PullRequest with id={id} does not exist: {str(e)}")
-
+            else:
+                PullRequest.objects.filter(id=id).update(action=action, state=state,
+                                                         updated_at=updated_at)
+        # Return a response
         return HttpResponse(status=200)
-    return HttpResponse(status=405)
+    else:
+        return HttpResponse(status=405)
