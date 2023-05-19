@@ -79,7 +79,8 @@ def index(request):
 
     # Construct the save path for the screenshot
     screenshot_path = os.path.join(settings.MEDIA_ROOT, "screenshots", "pull_request.png")
-
+    print(settings.MEDIA_ROOT)
+    print(screenshot_path)
     # Call the capture_screenshot function to take the screenshot
     capture_screenshot(pull_request_url, screenshot_path)
 
