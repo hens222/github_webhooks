@@ -10,7 +10,7 @@ class PullRequest(models.Model):
 
     STATE_CHOICES = [
         ('open', 'Open'),
-        ('close', 'Close'),
+        ('closed', 'Close'),
     ]
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
     number = models.PositiveIntegerField(primary_key=True)

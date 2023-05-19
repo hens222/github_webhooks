@@ -20,6 +20,7 @@ def webhook_handler(request):
         # Handle the webhook payload here
         # Example: process the payload and perform necessary actions
         event_type = request.headers.get('X-GitHub-Event')
+        print(payload)
         if event_type == 'pull_request':
             pu_number = payload['number']
             action = payload['action']
@@ -51,6 +52,3 @@ def webhook_handler(request):
         return HttpResponse(status=405)
 
 
-def index(request):
-    print(request)
-    return HttpResponse("tech with team")
