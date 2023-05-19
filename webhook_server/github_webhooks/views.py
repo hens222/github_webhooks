@@ -20,12 +20,10 @@ def webhook_handler(request):
         # Handle the webhook payload here
         # Example: process the payload and perform necessary actions
         event_type = request.headers.get('X-GitHub-Event')
-        print(type(payload))
-        print(payload)
         if event_type == 'pull_request':
-            pu_number = int(event_type['number'])
-            action = ACTION_CHOICES[[event_type['action']]]
-            pull_request = event_type['pull_request']
+            pu_number = payload['number']
+            action = ACTION_CHOICES[[payload['action']]]
+            pull_request = payload['pull_request']
             state = STATE_CHOICES[pull_request['state']]
             if pull_request['updated_at']:
                 updated_at = datetime.strptime(pull_request['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
