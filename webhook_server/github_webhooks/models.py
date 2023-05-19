@@ -13,7 +13,7 @@ class PullRequest(models.Model):
         ('closed', 'Close'),
     ]
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
-    number = models.PositiveIntegerField(primary_key=True)
+    id = models.PositiveIntegerField(primary_key=True)
     url = models.URLField()
     state = models.CharField(max_length=10, choices=STATE_CHOICES)
     title = models.CharField(max_length=255)

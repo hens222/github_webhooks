@@ -20,20 +20,19 @@ def webhook_handler(request):
         # Handle the webhook payload here
         # Example: process the payload and perform necessary actions
         event_type = request.headers.get('X-GitHub-Event')
-        print(payload)
         if event_type == 'pull_request':
-            pu_number = payload['number']
-            action = payload['action']
             pull_request = payload['pull_request']
+            id = pull_request['id']
+            action = payload['action']
             state = pull_request['state']
             if pull_request['updated_at']:
                 updated_at = datetime.strptime(pull_request['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
             else:
                 updated_at = None
-            if not check_pull_request_exists(pu_number):
+            if not check_pull_request_exists(id):
                 PullRequest.objects.create(
                     action=action,
-                    number=pu_number,
+                    id=id,
                     url=pull_request['html_url'],
                     state=state,
                     title=pull_request['title'],
@@ -44,11 +43,9 @@ def webhook_handler(request):
                     user=pull_request['user']['login'],
                 )
             else:
-                PullRequest.objects.filter(number=pu_number).update(action=action, state=state,
-                                                                       updated_at=updated_at)
+                PullRequest.objects.filter(id=id).update(action=action, state=state,
+                                                         updated_at=updated_at)
         # Return a response
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
-
-
