@@ -6,6 +6,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import PullRequest
 
+import requests
+from PIL import Image
+from io import BytesIO
+import os
+
+from django.conf import settings
+
 
 @csrf_exempt
 def webhook_handler(request):
@@ -53,6 +60,30 @@ def webhook_handler(request):
         return HttpResponse(status=405)
 
 
-def index(request):
-    url = 'https://github.com/hens2013/demo-repository/pull/13'
+def capture_screenshot(url, save_path):
+    # Send an HTTP GET request to the pull request URL
+    response = requests.get(url)
 
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Open the response content as an image using Pillow
+        image = Image.open(BytesIO(response.content))
+
+        # Save the image to the specified path
+        image.save(save_path)
+
+
+def index(request):
+    # Assuming you have the pull request URL stored in a variable
+    pull_request_url = "https://github.com/username/repository/pull/123"
+
+    # Construct the save path for the screenshot
+    screenshot_path = os.path.join(settings.MEDIA_ROOT, "screenshots", "pull_request.png")
+
+    # Call the capture_screenshot function to take the screenshot
+    capture_screenshot(pull_request_url, screenshot_path)
+
+    # Save the screenshot path to the database or perform any other necessary operations
+
+    # Return a response or render a template
+    return HttpResponse("Screenshot captured successfully.")
