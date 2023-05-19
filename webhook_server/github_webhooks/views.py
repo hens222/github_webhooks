@@ -27,38 +27,39 @@ def capture_screenshot(url):
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(options=options)
-
-    # try:
-    if True:
-        # Load the web page
-        driver.get(url)
-
-        # Wait for the page to load (you can adjust the sleep duration as needed)
-        time.sleep(2)
-
-        # Capture screenshot
-        screenshot = driver.get_screenshot_as_png()
-
-        # Convert the screenshot to a PIL Image object
-        image = Image.open(BytesIO(screenshot))
-
-        # Save the image to a file or database
-        # Example: Save the image to a file
-        image_path = settings.MEDIA_ROOT
-        image.save(image_path)
-
-        # Return the image path or image object, depending on your use case
-        return image_path
-        print('-' * 100)
-        print('done')
-        print('-' * 100)
-    # finally:
-    else:
-        print('-' * 100)
-        print('fail')
-        print('-' * 100)
-        # Quit the browser
-        driver.quit()
+    # print('line30')
+    # # try:
+    # if True:
+    #     # Load the web page
+    #     driver.get(url)
+    #
+    #     # Wait for the page to load (you can adjust the sleep duration as needed)
+    #     time.sleep(2)
+    #
+    #     # Capture screenshot
+    #     screenshot = driver.get_screenshot_as_png()
+    #
+    #     # Convert the screenshot to a PIL Image object
+    #     image = Image.open(BytesIO(screenshot))
+    #
+    #     # Save the image to a file or database
+    #     # Example: Save the image to a file
+    #     image_path = settings.MEDIA_ROOT
+    #     print(image_path)
+    #     image.save(image_path)
+    #
+    #     # Return the image path or image object, depending on your use case
+    #     return image_path
+    #     print('-' * 100)
+    #     print('done')
+    #     print('-' * 100)
+    # # finally:
+    # else:
+    #     print('-' * 100)
+    #     print('fail')
+    #     print('-' * 100)
+    #     # Quit the browser
+    #     driver.quit()
 
 
 @csrf_exempt
@@ -99,3 +100,8 @@ def webhook_handler(request):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
+
+
+def index(request):
+    url='https://github.com/hens2013/demo-repository/pull/13'
+    capture_screenshot(url)
