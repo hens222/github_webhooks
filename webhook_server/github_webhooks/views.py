@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 from django.http import HttpResponse
@@ -14,7 +15,7 @@ def check_pull_request_exists(pk):
 @csrf_exempt
 def webhook_handler(request):
     if request.method == 'POST':
-        payload = request.json()
+        payload = json.loads(request.body)
 
         event_type = request.headers.get('X-GitHub-Event')
         if event_type == 'pull_request':
