@@ -28,7 +28,8 @@ def capture_screenshot(url):
     options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(options=options)
 
-    try:
+    # try:
+    if True:
         # Load the web page
         driver.get(url)
 
@@ -51,7 +52,8 @@ def capture_screenshot(url):
         print('-' * 100)
         print('done')
         print('-' * 100)
-    finally:
+    # finally:
+    else:
         print('-' * 100)
         print('fail')
         print('-' * 100)
