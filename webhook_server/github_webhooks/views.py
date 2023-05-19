@@ -10,7 +10,7 @@ from .models import PullRequest
 
 
 def check_pull_request_exists(pk):
-    return PullRequest.objects.filter(number=pk).exists()
+    return PullRequest.objects.filter(id=pk).exists()
 
 
 @csrf_exempt
@@ -23,7 +23,6 @@ def webhook_handler(request):
         if event_type == 'pull_request':
             pull_request = payload['pull_request']
             id = pull_request['id']
-            number = payload['number']
             action = payload['action']
             state = pull_request['state']
             if pull_request['updated_at']:
@@ -34,7 +33,6 @@ def webhook_handler(request):
                 PullRequest.objects.create(
                     action=action,
                     id=id,
-                    number=number,
                     url=pull_request['html_url'],
                     state=state,
                     title=pull_request['title'],
