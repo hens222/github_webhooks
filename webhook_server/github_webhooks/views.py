@@ -8,14 +8,17 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def webhook_handler(request):
     if request.method == 'POST':
-        print('-' * 100)
-        print(request)
-        print('-' * 100)
         payload = json.loads(request.body)
         # Handle the webhook payload here
         # Example: process the payload and perform necessary actions
         event_type = request.headers.get('X-GitHub-Event')
-        print(f'Received {event_type} event: {payload}')
+        print('-' * 100)
+        print(event_type)
+        print('-' * 100)
+        print('-' * 100)
+        print('-' * 100)
+        print(payload)
+        print('-' * 100)
         # Return a response
         return HttpResponse(status=200)
     else:
