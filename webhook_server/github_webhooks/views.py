@@ -6,7 +6,7 @@ import json
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import PullRequest, ACTION_CHOICES, STATE_CHOICES
+from .models import PullRequest
 
 
 def check_pull_request_exists(pk):
