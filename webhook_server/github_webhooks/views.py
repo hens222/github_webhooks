@@ -24,9 +24,9 @@ def webhook_handler(request):
         print(type(ACTION_CHOICES))
         if event_type == 'pull_request':
             pu_number = payload['number']
-            action = ACTION_CHOICES[[payload['action']]]
+            action = payload['action']
             pull_request = payload['pull_request']
-            state = STATE_CHOICES[pull_request['state']]
+            state = pull_request['state']
             if pull_request['updated_at']:
                 updated_at = datetime.strptime(pull_request['updated_at'], "%Y-%m-%dT%H:%M:%SZ")
             else:

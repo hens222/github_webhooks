@@ -1,18 +1,17 @@
 from django.db import models
 
-ACTION_CHOICES = [
-    ('opened', 'Open'),
-    ('closed', 'Closed'),
-    ('reopened', 'Reopened'),
-]
-
-STATE_CHOICES = [
-    ('open', 'Open'),
-    ('close', 'Close'),
-]
-
 
 class PullRequest(models.Model):
+    ACTION_CHOICES = [
+        ('opened', 'Open'),
+        ('closed', 'Closed'),
+        ('reopened', 'Reopened'),
+    ]
+
+    STATE_CHOICES = [
+        ('open', 'Open'),
+        ('close', 'Close'),
+    ]
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
     number = models.PositiveIntegerField(primary_key=True)
     url = models.URLField()
