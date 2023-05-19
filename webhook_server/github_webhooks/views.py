@@ -34,9 +34,8 @@ def webhook_handler(request):
             except PullRequest.DoesNotExist:
                 new_pull_request = PullRequest.objects.create(
                     action=action,
-                    number=id,
+                    id=id,
                     url=url,
-                    html_url=pull_request['html_url'],
                     state=state,
                     title=pull_request['title'],
                     body=pull_request['body'],
